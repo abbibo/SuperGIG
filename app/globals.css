@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  /* Strict Palette */
+  --palette-green: #ACEC00;
+  --palette-navy: #00182E;
+  --palette-blue: #013FF6;
+
+  /* Semantic Mappings - Light Mode Default */
+  --background: #ffffff;
+  --foreground: #00182E; /* Navy Text */
+  
+  --card: #ffffff;
+  --card-foreground: #00182E;
+  
+  --popover: #ffffff;
+  --popover-foreground: #00182E;
+  
+  --primary: #013FF6; /* Blue */
+  --primary-foreground: #ffffff;
+  
+  --secondary: #f3f4f6;
+  --secondary-foreground: #00182E;
+  
+  --muted: #f3f4f6;
+  --muted-foreground: #64748b;
+  
+  --accent: #ACEC00; /* Green */
+  --accent-foreground: #00182E;
+  
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #013FF6; /* Blue Ring */
+
+  --radius: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #00182E; /* Navy Background */
+    --foreground: #ffffff;
+    
+    --card: #0c2442; /* Slightly lighter navy for cards */
+    --card-foreground: #ffffff;
+    
+    --popover: #00182E;
+    --popover-foreground: #ffffff;
+    
+    --primary: #013FF6;
+    --primary-foreground: #ffffff;
+    
+    --secondary: #1e293b;
+    --secondary-foreground: #ffffff;
+    
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    
+    --accent: #ACEC00;
+    --accent-foreground: #00182E;
+    
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: #ACEC00; /* Green Ring for dark mode visibility */
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Base Component Styles */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .card {
+    @apply rounded-xl border bg-card text-card-foreground shadow-sm;
+  }
+}
