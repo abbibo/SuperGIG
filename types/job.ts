@@ -15,9 +15,10 @@ export interface JobSchedule {
 }
 
 export interface JobCompensation {
-  amount: number;
-  unit: PayUnit;
-  currency: Currency;
+  amount?: number;
+  unit?: PayUnit;
+  currency?: Currency;
+  range?: string;
 }
 
 export interface JobRequirements {
@@ -57,6 +58,8 @@ export interface Job {
   creatorId: string; // ID of the user who created this job
   companyName: string;
   description: string;
+  category?: string;
+  type?: string;
   location: JobLocation;
   schedule: JobSchedule;
   compensation: JobCompensation;
@@ -65,7 +68,7 @@ export interface Job {
   capacity: JobCapacity;
   social: JobSocial;
   stats: JobStats;
-  status: 'draft' | 'active' | 'closed';
+  status: 'draft' | 'active' | 'closed' | 'rejected';
   createdAt: string; // ISO Timestamp
   updatedAt: string; // ISO Timestamp
 }

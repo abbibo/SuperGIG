@@ -6,9 +6,12 @@ import { Job } from "@/types/job";
 
 const mockActiveJob: Job = {
   id: "active_job_1",
+  creatorId: "mock_creator_1",
   title: "Job Title",
   companyName: "Company /job Creator Name",
   description: "Description",
+  category: "Engineering",
+  type: "full-time",
   location: { city: "Bengaluru", state: "Karnataka" },
   schedule: { startDate: "2025-08-13", endDate: "2025-08-15", startTime: "10:00 am", endTime: "6:00 pm" },
   compensation: { amount: 500, unit: "day", currency: "INR" },

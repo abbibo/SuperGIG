@@ -77,7 +77,7 @@ export default function JobCard({ job, actionButton }: JobCardProps) {
         <div className="flex flex-wrap items-center text-gray-700 text-[15px] gap-y-2">
             <div className="flex items-center gap-2 mr-4">
                 <MapPin className="w-5 h-5 text-gray-500" strokeWidth={1.5} />
-                <span>{job.location.city}, {job.location.state}</span>
+                <span>{typeof job.location === 'string' ? job.location : `${job.location.city}, ${job.location.state}`}</span>
             </div>
             <div className="h-4 w-[1px] bg-gray-300 mx-2 hidden sm:block"></div>
              <div className="flex items-center gap-2 mr-4">
@@ -101,7 +101,9 @@ export default function JobCard({ job, actionButton }: JobCardProps) {
              <div className="flex items-center gap-2 mr-4">
                 <CreditCard className="w-5 h-5 text-gray-500" strokeWidth={1.5} />
                 <span className="font-semibold text-gray-900">
-                    {formatCurrency(job.compensation.amount, job.compensation.currency)}/{job.compensation.unit}
+                    {typeof job.compensation === 'string' 
+                      ? job.compensation 
+                      : job.compensation.range || `${formatCurrency(job.compensation.amount || 0, job.compensation.currency || 'INR')}/${job.compensation.unit}`}
                 </span>
             </div>
              <div className="h-4 w-[1px] bg-gray-300 mx-2 hidden sm:block"></div>

@@ -2,9 +2,10 @@ import { db } from "@/lib/firebase";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 
 import { UserProfile, UserRole } from "@/types/user";
+export type { UserProfile, UserRole };
 import { serverTimestamp } from "firebase/firestore";
 
-// Types moved to @/types/user
+// Types re-exported from @/types/user
 
 export const UserService = {
   async createUser(uid: string, email: string, role: UserRole, additionalData?: any) {

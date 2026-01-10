@@ -68,13 +68,13 @@ export default function JobDetailsPage() {
                 {job.companyName}
               </p>
               <p className="text-sm text-subtext-light dark:text-subtext-dark">
-                Posted {job.createdAt?.toDate ? new Date(job.createdAt.toDate()).toLocaleDateString() : 'Recently'}
+                Posted {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : 'Recently'}
               </p>
             </div>
             
             <div className="flex flex-wrap gap-2">
               {job.type && <Badge>{job.type}</Badge>}
-              {job.status !== 'approved' && <Badge variant="warning">{job.status}</Badge>}
+              {job.status !== 'active' && <Badge variant="warning">{job.status}</Badge>}
             </div>
           </div>
 
@@ -86,7 +86,7 @@ export default function JobDetailsPage() {
               </span>
               <p className="text-base font-semibold text-text-light dark:text-text-dark flex items-center gap-2">
                 <span className="material-icons text-lg text-primary">location_on</span>
-                {job.location}
+                {typeof job.location === 'string' ? job.location : `${job.location.city}, ${job.location.state}`}
               </p>
             </div>
             <div>
@@ -95,7 +95,11 @@ export default function JobDetailsPage() {
               </span>
               <p className="text-base font-semibold text-text-light dark:text-text-dark flex items-center gap-2">
                 <span className="material-icons text-lg text-primary">attach_money</span>
-                {job.salary}
+                {typeof job.compensation === 'string' 
+                  ? job.compensation 
+                  : job.compensation.range 
+                    ? job.compensation.range 
+                    : `${job.compensation.amount} ${job.compensation.currency || 'INR'}/${job.compensation.unit || 'month'}`}
               </p>
             </div>
             <div>

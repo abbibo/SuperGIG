@@ -14,6 +14,7 @@ import {
   Timestamp
 } from "firebase/firestore";
 import { Job } from "@/types/job";
+export type { Job };
 
 export const JobService = {
   // Helper to convert Firestore data to Job type
@@ -92,5 +93,25 @@ export const JobService = {
 
   async deleteJob(jobId: string) {
     await deleteDoc(doc(db, "jobs", jobId));
+  },
+
+  async getPendingJobs() {
+    const q = query(
+      collection(db, "jobs"),
+      where("status", "==", "draft"),
+      orderBy("createdAt", "desc")
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => this.fromFirestore(doc));
+  },
+
+  async updateJobStatus(jobId: string, action: 'approved' | 'rejected') {
+    const jobRef = doc(db, "jobs", jobId);
+    const newStatus = action === 'approved' ? 'active' : 'rejected';
+    
+    await updateDoc(jobRef, {
+      status: newStatus,
+      updatedAt: serverTimestamp()
+    });
   }
 };

@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 
 import { Application } from "@/types/application";
+export type { Application };
 
 // Interface moved to @/types/application
 

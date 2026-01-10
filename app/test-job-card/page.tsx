@@ -3,8 +3,11 @@ import { Job } from "@/types/job";
 
 const sampleJob: Job = {
   id: "job_uuid",
+  creatorId: "mock_creator_1",
   title: "Job Title",
   companyName: "Company /job Creator Name",
+  category: "Engineering",
+  type: "full-time",
   description: "Detailed job description",
   location: {
     city: "Bengaluru",

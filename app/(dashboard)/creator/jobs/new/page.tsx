@@ -36,11 +36,42 @@ export default function CreateJobPage() {
         creatorId: user.uid,
         title: formData.title,
         category: formData.category,
-        type: formData.type as any,
-        location: formData.location,
-        salary: formData.salary,
+        type: formData.type,
+        location: {
+          city: formData.location.split(',')[0]?.trim() || formData.location,
+          state: formData.location.split(',')[1]?.trim() || ''
+        },
+        compensation: {
+            range: formData.salary
+        },
         description: formData.description,
-        companyName: user.displayName || "Company", // Ideally fetch profile
+        companyName: user.displayName || "Company",
+        // Defaults for required fields not in form
+        status: 'draft',
+        schedule: {
+            startDate: new Date().toISOString().split('T')[0],
+            endDate: new Date(Date.now() + 86400000 * 30).toISOString().split('T')[0],
+            startTime: '09:00',
+            endTime: '17:00'
+        },
+        dressCode: 'any',
+        requirements: {
+            drivingLicenseRequired: false,
+            vehicleRequired: false,
+            pvcRequired: false
+        },
+        capacity: {
+            total: 1,
+            male: 0,
+            female: 0
+        },
+        social: {
+            allowReferral: true
+        },
+        stats: {
+            appliedCount: 0,
+            selectedCount: 0
+        }
       });
       router.push("/creator");
     } catch (error) {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function AdminJobsPage() {
   const [pendingJobs, setPendingJobs] = useState<Job[]>([]);
@@ -70,10 +70,8 @@ export default function AdminJobsPage() {
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted mb-4">
-                  <div><span className="font-semibold">Type:</span> {job.type}</div>
-                  <div><span className="font-semibold">Loc:</span> {job.location}</div>
-                  <div><span className="font-semibold">Cat:</span> {job.category}</div>
-                  <div><span className="font-semibold">Salary:</span> {job.salary}</div>
+                  <div><span className="font-semibold">Loc:</span> {job.location.city}, {job.location.state}</div>
+                  <div><span className="font-semibold">Pay:</span> {job.compensation.range || `${job.compensation.amount} ${job.compensation.currency}/${job.compensation.unit}`}</div>
                 </div>
                 
                 <div className="bg-muted/10 p-4 rounded-md mb-6">

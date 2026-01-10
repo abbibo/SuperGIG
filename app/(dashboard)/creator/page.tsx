@@ -47,7 +47,7 @@ export default function CreatorDashboard() {
           <p className="text-muted text-center py-4">Loading jobs...</p>
         ) : jobs.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted mb-4">You haven't posted any jobs yet.</p>
+            <p className="text-muted mb-4">You haven&apos;t posted any jobs yet.</p>
             <Link href="/creator/jobs/new">
               <Button variant="outline">Create your first job</Button>
             </Link>
@@ -61,12 +61,12 @@ export default function CreatorDashboard() {
                   <div className="text-sm text-muted flex gap-2">
                     <span>{job.type}</span>
                     <span>•</span>
-                    <span>{job.location}</span>
+                    <span>{typeof job.location === 'string' ? job.location : `${job.location.city}, ${job.location.state}`}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                    <Badge variant={
-                     job.status === 'approved' ? 'success' : 
+                     job.status === 'active' ? 'success' : 
                      job.status === 'rejected' ? 'destructive' : 
                      'warning'
                    }>

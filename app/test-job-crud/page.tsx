@@ -6,8 +6,11 @@ import { Job } from "@/types/job";
 import { Button } from "@/components/ui/Button";
 
 const sampleJobData: Omit<Job, "id" | "createdAt" | "updatedAt"> = {
+  creatorId: "mock_creator_1",
   title: "Test Job Logic",
   companyName: "Test Company Inc.",
+  category: "Engineering",
+  type: "full-time",
   description: "Testing CRUD ops",
   location: { city: "Mumbai", state: "Maharashtra" },
   schedule: { startDate: "2025-09-01", endDate: "2025-09-05", startTime: "09:00", endTime: "17:00" },

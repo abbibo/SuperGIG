@@ -10,8 +10,11 @@ import { Job } from "@/types/job";
 // Mock Data matching the Job interface
 const mockJob: Job = {
   id: "job_status_1",
+  creatorId: "mock_creator_1",
   title: "Job Title",
   companyName: "Company /job Creator Name",
+  category: "Engineering",
+  type: "full-time",
   description: "Description",
   location: { city: "Bengaluru", state: "Karnataka" },
   schedule: { startDate: "2025-08-13", endDate: "2025-08-15", startTime: "10:00 am", endTime: "6:00 pm" },
