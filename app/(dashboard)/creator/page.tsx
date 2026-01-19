@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Job, JobService } from "@/services/jobs";
@@ -9,13 +10,25 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
 export default function CreatorDashboard() {
-  const { user } = useAuth();
+  const { user, userRole, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Protect route
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        router.push("/login");
+      } else if (userRole !== "creator") {
+        router.push("/");
+      }
+    }
+  }, [user, userRole, authLoading, router]);
+
   useEffect(() => {
     async function fetchJobs() {
-      if (user) {
+      if (user && userRole === "creator") {
         try {
           const userJobs = await JobService.getJobsByCreator(user.uid);
           setJobs(userJobs);
@@ -26,8 +39,22 @@ export default function CreatorDashboard() {
         }
       }
     }
-    fetchJobs();
-  }, [user]);
+    if (!authLoading && userRole === "creator") {
+      fetchJobs();
+    }
+  }, [user, userRole, authLoading]);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user || userRole !== "creator") {
+    return null;
+  }
 
   return (
     <div className="space-y-6">

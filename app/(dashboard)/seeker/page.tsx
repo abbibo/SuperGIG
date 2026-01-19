@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
@@ -9,13 +10,25 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
 export default function SeekerDashboard() {
-  const { user } = useAuth();
+  const { user, userRole, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Protect route
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        router.push("/login");
+      } else if (userRole !== "seeker") {
+        router.push("/"); // Or an unauthorized page
+      }
+    }
+  }, [user, userRole, authLoading, router]);
+
   useEffect(() => {
     async function fetchApps() {
-      if (user) {
+      if (user && userRole === "seeker") {
         try {
           const apps = await ApplicationService.getApplicationsByUser(user.uid);
           setApplications(apps);
@@ -26,8 +39,23 @@ export default function SeekerDashboard() {
         }
       }
     }
-    fetchApps();
-  }, [user]);
+    if (!authLoading && userRole === "seeker") {
+      fetchApps();
+    }
+  }, [user, userRole, authLoading]);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Prevent flash of content if redirected
+  if (!user || userRole !== "seeker") {
+    return null;
+  }
 
   return (
     <div className="space-y-8">
@@ -68,7 +96,7 @@ export default function SeekerDashboard() {
               No applications yet
             </p>
             <p className="text-subtext-light dark:text-subtext-dark mb-6">
-              You haven't applied to any jobs yet.
+              You haven&apos;t applied to any jobs yet.
             </p>
             <Link href="/jobs">
               <Button>Find a Job</Button>

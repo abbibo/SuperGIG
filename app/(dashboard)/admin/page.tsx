@@ -1,8 +1,35 @@
 "use client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { useEffect } from "react";
 
 export default function AdminDashboard() {
+  const { user, userRole, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        router.push("/login");
+      } else if (userRole !== "admin") {
+        router.push("/");
+      }
+    }
+  }, [user, userRole, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user || userRole !== "admin") {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Admin Dashboard</h1>
