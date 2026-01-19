@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import Link from "next/link";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, actionCodeSettings } from "@/lib/firebase";
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ export default function ResetPasswordPage() {
     setError("");
     
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
       setSubmitted(true);
     } catch (err: unknown) {
       console.error(err);

@@ -10,6 +10,7 @@ interface AuthContextType {
   userRole: "admin" | "creator" | "seeker" | null;
   loading: boolean;
   signOut: () => Promise<void>;
+  loginAsTestUser: (role: "creator" | "seeker") => Promise<string>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   userRole: null,
   loading: true,
   signOut: async () => {},
+  loginAsTestUser: async () => "",
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -59,8 +61,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await firebaseSignOut(auth);
   };
 
+  const loginAsTestUser = async (role: "creator" | "seeker") => {
+    try {
+      const { createUserWithEmailAndPassword } = await import("firebase/auth");
+      const { setDoc, serverTimestamp } = await import("firebase/firestore");
+      
+      // Use random email/password since Anonymous auth is disabled
+      const timestamp = Date.now();
+      const randomId = Math.random().toString(36).substring(7);
+      const email = `guest-${timestamp}-${randomId}@supergig.debug`;
+      const password = "debug-password-123";
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+      
+      // Create user document
+      await setDoc(doc(db, "users", uid), {
+        email: email,
+        role: role,
+        createdAt: serverTimestamp(),
+        isAnonymous: false, // It's technically a real user now, but temporary
+        displayName: `Test ${role.charAt(0).toUpperCase() + role.slice(1)}`
+      }, { merge: true });
+
+      // Force state update since logic inside onAuthStateChanged might race or we want immediate feedback
+      setUserRole(role); 
+      return uid;
+      
+    } catch (error) {
+      console.error("Error logging in as test user:", error);
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, userRole, loading, signOut }}>
+    <AuthContext.Provider value={{ user, userRole, loading, signOut, loginAsTestUser }}>
       {children}
     </AuthContext.Provider>
   );

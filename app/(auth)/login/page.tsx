@@ -10,12 +10,30 @@ import { Card } from "@/components/ui/Card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/components/providers/AuthProvider";
+
 export default function LoginPage() {
   const router = useRouter();
+  const { loginAsTestUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const showBypass = process.env.NEXT_PUBLIC_ENABLE_AUTH_BYPASS === 'true';
+
+  const handleTestLogin = async (role: "creator" | "seeker") => {
+    setLoading(true);
+    setError("");
+    try {
+      const uid = await loginAsTestUser(role);
+      await handleRedirect(uid);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to enter test mode");
+      setLoading(false);
+    }
+  };
 
   const handleRedirect = async (uid: string) => {
     const userProfile = await UserService.getUser(uid);
@@ -78,6 +96,33 @@ export default function LoginPage() {
       </div>
 
       <Card className="w-full" padding="lg">
+        {showBypass && (
+          <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+             <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200 mb-3 text-center">
+               Start Testing (Debug Mode)
+             </p>
+             <div className="flex gap-3">
+               <Button 
+                 type="button" 
+                 variant="outline" 
+                 className="w-full"
+                 onClick={() => handleTestLogin("creator")}
+                 disabled={loading}
+               >
+                 Employer
+               </Button>
+               <Button 
+                 type="button" 
+                 variant="outline" 
+                 className="w-full"
+                 onClick={() => handleTestLogin("seeker")}
+                 disabled={loading}
+               >
+                 Job Seeker
+               </Button>
+             </div>
+          </div>
+        )}
         {/* Social Login Buttons */}
         <div className="mb-6">
           <p className="text-sm font-medium text-subtext-light dark:text-subtext-dark mb-4 text-center">
