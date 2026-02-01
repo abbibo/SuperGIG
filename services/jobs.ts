@@ -113,5 +113,11 @@ export const JobService = {
       status: newStatus,
       updatedAt: serverTimestamp()
     });
+  },
+
+  async getAllJobs() {
+    const q = query(collection(db, "jobs"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => this.fromFirestore(doc));
   }
 };
