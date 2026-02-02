@@ -36,9 +36,7 @@ let db: Firestore;
 try {
   // If app was just initialized or we are lucky, we can configure it.
   // Ideally this throws if already initialized.
-  db = initializeFirestore(app, {
-      experimentalForceLongPolling: true,
-  });
+  db = initializeFirestore(app, {});
 } catch (e) {
   // Fallback if already initialized (hot reload)
   db = getFirestore(app);

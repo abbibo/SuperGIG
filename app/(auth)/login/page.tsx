@@ -61,9 +61,16 @@ export default function LoginPage() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       await handleRedirect(userCredential.user.uid);
-    } catch (err: unknown) {
+      await handleRedirect(userCredential.user.uid);
+    } catch (err: any) {
       console.error(err);
-      setError("Invalid email or password");
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError("Invalid email or password");
+      } else if (err.code === 'auth/too-many-requests') {
+        setError("Too many failed login attempts. Please try again later.");
+      } else {
+        setError("Failed to sign in. Please check your connection and try again.");
+      }
     } finally {
       setLoading(false);
     }

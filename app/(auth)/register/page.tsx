@@ -17,6 +17,7 @@ function RegisterForm() {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<UserRole>(initialRole);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -53,9 +54,26 @@ function RegisterForm() {
     setLoading(true);
     setError("");
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     try {
+      console.log("Starting registration process...");
+      const t0 = performance.now();
+      
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const t1 = performance.now();
+      console.log(`[PERF] Auth Creation: ${(t1 - t0).toFixed(2)}ms`);
+      
+      console.log("User created in Auth:", userCredential.user.uid);
+      
       await UserService.createUser(userCredential.user.uid, email, role);
+      const t2 = performance.now();
+      console.log(`[PERF] Firestore Creation: ${(t2 - t1).toFixed(2)}ms`);
+      console.log("User created in Firestore (UserService)");
       
       // Redirect based on role
       if (role === "creator") {
@@ -63,9 +81,18 @@ function RegisterForm() {
       } else {
         router.push("/seeker");
       }
+      const t3 = performance.now();
+      console.log(`[PERF] Total Register Time: ${(t3 - t0).toFixed(2)}ms`);
+      console.log("Redirecting to role dashboard");
     } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Failed to register");
+      console.error("Registration error:", err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError("Email is already registered. Please sign in instead.");
+      } else if (err.code === 'auth/weak-password') {
+        setError("Password should be at least 6 characters.");
+      } else {
+        setError("Failed to register. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -177,6 +204,8 @@ function RegisterForm() {
             type="password" 
             label="Re-type Password" 
             required 
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm your password"
           />
 

@@ -18,7 +18,22 @@ export const UserService = {
       ...additionalData
     };
     
-    await setDoc(userRef, userData);
+    // Create a timeout promise
+    const timeout = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("Firestore operation timed out")), 10000)
+    );
+
+    try {
+        await Promise.race([
+            setDoc(userRef, userData),
+            timeout
+        ]);
+    } catch (error) {
+        console.error("UserService.createUser failed:", error);
+        // We might want to throw here or handle it gracefully depending on UX
+        throw error;
+    }
+    
     return userData;
   },
 

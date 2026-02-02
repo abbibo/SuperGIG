@@ -1,0 +1,58 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - heading "We Say Hello!" [level=1] [ref=e6]
+      - paragraph [ref=e7]: Create your account to get started.
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - paragraph [ref=e10]: I am a
+        - generic [ref=e11]:
+          - button "Job Seeker" [ref=e12]
+          - button "Job Creator" [ref=e13]
+      - generic [ref=e14]:
+        - paragraph [ref=e15]: Or Sign Up With
+        - generic [ref=e16]:
+          - button [ref=e17]:
+            - img [ref=e18]
+          - button [ref=e23]:
+            - img [ref=e24]
+          - button [ref=e26]:
+            - img [ref=e27]
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: Email
+          - textbox "Email" [ref=e32]:
+            - /placeholder: Enter your email
+            - text: test.user.1769963744631.7648@supergig.debug
+        - generic [ref=e33]:
+          - generic [ref=e34]: Create Password
+          - textbox "Create Password" [ref=e35]:
+            - /placeholder: Create a password
+            - text: Password123!
+        - generic [ref=e36]:
+          - generic [ref=e37]: Re-type Password
+          - textbox "Re-type Password" [ref=e38]:
+            - /placeholder: Confirm your password
+            - text: Password123!
+        - paragraph [ref=e40]: Failed to register. Please try again.
+        - button "Sign Up" [ref=e42]
+      - paragraph [ref=e44]:
+        - text: Already have an account?
+        - link "Sign in" [ref=e45] [cursor=pointer]:
+          - /url: /login
+  - generic [ref=e50] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e51]:
+      - img [ref=e52]
+    - generic [ref=e55]:
+      - button "Open issues overlay" [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]: "0"
+          - generic [ref=e59]: "1"
+        - generic [ref=e60]: Issue
+      - button "Collapse issues badge" [ref=e61]:
+        - img [ref=e62]
+  - alert [ref=e64]
+```
