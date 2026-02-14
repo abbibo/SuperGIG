@@ -13,14 +13,24 @@ export default function Home() {
         <p className="text-muted-foreground max-w-sm mx-auto">
           Welcome to Supergig. Please sign in to continue.
         </p>
-        <Button 
-          variant="primary" 
-          size="lg" 
-          onClick={() => router.push("/login")}
-          className="w-full sm:w-auto"
-        >
-          Sign In
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto">
+          <Button 
+            variant="outline" 
+            size="lg" 
+            onClick={() => router.push("/login")}
+            className="w-full sm:w-auto min-w-[140px]"
+          >
+            Log In
+          </Button>
+          <Button 
+            variant="primary" 
+            size="lg" 
+            onClick={() => router.push("/register")}
+            className="w-full sm:w-auto min-w-[140px]"
+          >
+            Sign Up
+          </Button>
+        </div>
       </div>
     </div>
   );
